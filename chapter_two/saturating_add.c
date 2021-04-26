@@ -2,13 +2,12 @@
 
 int saturating_add(int x, int y)
 {
-    int l = sizeof(int) << 3;
-    int a = x + y;
-    int b = !((a & x >> (l - 1)) || (a & y >> (l - 1)));
-    a = a - !((x + y) >> (l - 1));
-    int c = (b << (l - 1));
-    c = c >> (l - 2);
-    c = (unsigned)c >> 1;
-
-    return c | a + !((x + y) >> (l - 1));
+    int w = (sizeof(int) << 3) - 1;
+    int mark1 = (x ^ y) >> w;
+    int mark2 = ((x + y) ^ x) >> w;
+    int mark = ~mark1 & mark2;
+    //overflow: mark==-1; ==0 otherwise
+    int pos = x >> w; //可判断为上溢还是下溢 pos==-1为下溢 pos==0为上溢
+    int ans = (~mark & (x + y)) + (((unsigned)(-1) >> 1) ^ pos) - ((~mark) & (((unsigned)(-1) >> 1) ^ pos));
+    return ans;
 }
