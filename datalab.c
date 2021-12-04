@@ -293,7 +293,6 @@ int logicalNeg(int x)
  *  Max ops: 90
  *  Rating: 4
  */
-//有问题
 int howManyBits(int x) 
 {		
 	int a=x>>31 & 0xff;
